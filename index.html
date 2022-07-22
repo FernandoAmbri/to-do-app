@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO app</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.css"
+      integrity="sha512-1hsteeq9xTM5CX6NsXiJu3Y/g+tj+IIwtZMtTisemEv3hx+S9ngaW4nryrNcPM4xGzINcKbwUJtojslX2KG+DQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/regular.css"
+      integrity="sha512-1Z0ScgwDmjSB6AZg0hYe7V5Sf1NQ+D08o3jscOrdwKiDfHffuz8T92XAI2YVI6trl0nNwR2RJf5lNMni1MSGiQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <ul>
+          <li>
+            <a href="#"><i class="fa-solid fa-bars"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa-solid fa-home"></i></a>
+          </li>
+          <li><input type="search" placeholder="search" /></li>
+        </ul>
+        <ul>
+          <li>
+            <a href="#"><i class="fa-solid fa-plus"></i></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <aside class="sidebar">
+        <div class="container">
+          <div class="inbox section">
+            <div>
+              <i class="fa-solid fa-inbox"></i>
+              <p id="todo-title">Inbox</p>
+            </div>
+            <span id="number-of-task-inbox"></span>
+          </div>
+          <div class="today section">
+            <div>
+              <i class="fa-solid fa-calendar-check"></i>
+              <p id="todo-title">Today</p>
+            </div>
+            <span id="number-of-task-today"></span>
+          </div>
+          <div class="projects">
+            <div>
+              <i class="fa-solid fa-chevron-right" id="show-projects"></i>
+              <h2>Projects</h2>
+            </div>
+            <i class="fa-solid fa-plus" id="add-project"></i>
+          </div>
+          <div class="container-projects"></div>
+        </div>
+      </aside>
+      <div class="content">
+        <div class="task-container">
+          <h1>Inbox</h1>
+          <div class="task-list">
+            <!-- <div class="task">
+              <input type="checkbox" id="task-finished" />
+              <div>
+                <h2 class="task-name" id="task-name">Fernando</h2>
+                <p class="task-description" id="task-name">Do something</p>
+              </div>
+              <i class="fa-regular fa-pen-to-square"></i>
+            </div> -->
+          </div>
+          <button class="add-task">
+            <i class="fa-solid fa-plus"></i> Add task
+          </button>
+          <form action="#" class="form-task-card" id="form-task-card">
+            <div class="task-card">
+              <input
+                type="text"
+                id="task-name"
+                placeholder="Task name"
+                minlength="1"
+                maxlength="150"
+                required
+              />
+              <textarea
+                name="description"
+                id="task-description"
+                placeholder="Description"
+                cols="30"
+                rows="10"
+              ></textarea>
+              <div class="selectors">
+                <div>
+                  <input type="date" id="dueDate" name="dueDate" required />
+                  <select name="projects" id="select-project">
+                    <option value="" hidden>Choose a project</option>
+                  </select>
+                </div>
+                <select name="priority" id="task-priority">
+                  <option value="" hidden>Priority</option>
+                  <option value="red">Red</option>
+                  <option value="orange">Orange</option>
+                  <option value="yellow">Yellow</option>
+                  <option value="blue">Blue</option>
+                </select>
+              </div>
+            </div>
+            <div class="buttons-card">
+              <button type="button" class="btn-cancel">Cancel</button>
+              <button type="submit" class="btn-add">Add task</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+    <div class="container-fixed">
+      <form action="#">
+        <div class="task-card">
+          <input
+            type="text"
+            id="task-name"
+            placeholder="Task name"
+            minlength="1"
+            maxlength="150"
+            required
+          />
+          <textarea
+            name="description"
+            id="task-description"
+            placeholder="Description"
+            cols="30"
+            rows="10"
+          ></textarea>
+          <div class="selectors">
+            <div>
+              <input type="date" id="dueDate" name="dueDate" required />
+              <select name="projects" id="select-project">
+                <option value="" hidden>Choose a project</option>
+              </select>
+            </div>
+            <select name="priority" id="task-priority">
+              <option value="" hidden>Priority</option>
+              <option value="1">Priority 1</option>
+              <option value="2">Priority 2</option>
+              <option value="3">Priority 3</option>
+              <option value="4">Priority 4</option>
+            </select>
+          </div>
+        </div>
+        <div class="buttons-card">
+          <button class="btn-cancel">Cancel</button>
+          <button class="btn-add">Add task</button>
+        </div>
+      </form>
+    </div>
+    <div class="container-add-project">
+      <form action="#" id="form_add_project">
+        <label for="project-name">Name</label>
+        <input type="text" id="project-name" name="project-name" required />
+        <div class="buttons-card">
+          <button class="btn-cancel-project">Cancel</button>
+          <button type="submit" class="btn-add">Add</button>
+        </div>
+      </form>
+    </div>
+    <form action="#" class="form-update-task" id="form-update-task">
+      <div class="task-card">
+        <input
+          type="text"
+          id="task-name-update"
+          placeholder="Task name"
+          minlength="1"
+          maxlength="150"
+          required
+        />
+        <textarea
+          name="description"
+          id="task-description-update"
+          placeholder="Description"
+          cols="30"
+          rows="10"
+        ></textarea>
+        <div class="selectors">
+          <div>
+            <input type="date" id="dueDate-update" name="dueDate" required />
+            <select name="projects" id="select-project-update">
+              <option value="" hidden>Choose a project</option>
+            </select>
+          </div>
+          <select name="priority" id="task-priority-update">
+            <option value="" hidden>Priority</option>
+            <option value="red">Red</option>
+            <option value="orange">Orange</option>
+            <option value="yellow">Yellow</option>
+            <option value="blue">Blue</option>
+          </select>
+        </div>
+      </div>
+      <div class="buttons-card">
+        <button type="button" class="btn-cancel-update">Cancel</button>
+        <button type="submit" class="btn-save">Save</button>
+      </div>
+    </form>
+  </body>
+</html>
