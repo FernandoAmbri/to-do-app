@@ -3,7 +3,7 @@ function createCardTodo(index, objTodo) {
   const divTaskInfo = document.createElement("div");
   const iconUpdateTask = document.createElement("i");
 
-  divTask.innerHTML = `<input type="checkbox" id="task-finished" />`;
+  divTask.innerHTML = `<input type="checkbox" id="task-finished checked='true'" />`;
   divTaskInfo.innerHTML = `<h2 class="task-name" id="task-name">${objTodo["title"]}</h2>
   <p class="task-description" id="task-name">${objTodo["description"]}</p>`;
 
@@ -19,4 +19,25 @@ function createCardTodo(index, objTodo) {
   document.querySelector(".task-list").appendChild(divTask);
 }
 
-export { createCardTodo };
+function createCardProjects(index, objectProject) {
+  const containerProjects = document.querySelector(".container-projects");
+  const divProject = document.createElement("div");
+  const divInfo = document.createElement("div");
+  const iconDelete = document.createElement("i");
+
+  divInfo.innerHTML = `<i class="fa-regular fa-file"></i>
+  <p id="project-name">${objectProject["name"]}</p>`;
+
+  iconDelete.classList.add("fa-regular", "fa-trash-can");
+  iconDelete.setAttribute("id", "delete-project");
+
+  divProject.classList.add("project", "section");
+  divProject.setAttribute("index-todo", index);
+
+  divProject.appendChild(divInfo);
+  divProject.appendChild(iconDelete);
+
+  containerProjects.appendChild(divProject);
+}
+
+export { createCardTodo, createCardProjects };

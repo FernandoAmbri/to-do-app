@@ -87,14 +87,25 @@ main {
   height: 40px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   padding: 10px;
   font-size: 1.5rem;
   border-radius: 6px;
 }
 
-.section-active:not(.projects),
-.section:hover:not(.projects) {
+.section div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section span {
+  font-size: 1.3rem;
+  color: #555;
+}
+
+.section-active,
+.section:hover {
   background: #eee;
   cursor: pointer;
 }
@@ -104,9 +115,13 @@ main {
 }
 
 .projects {
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
+  font-size: 1.5rem;
+  border-radius: 6px;
 }
 
 .projects>div {
@@ -127,6 +142,40 @@ main {
 
 .projects .fa-plus:hover {
   background: #eee;
+  cursor: pointer;
+}
+
+.container-projects {
+  display: none;
+  overflow: auto;
+  font-size: 1.5rem;
+  height: 220px;
+}
+
+.container-projects .project {
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.project div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.project:hover {
+  background: #eee;
+  cursor: pointer;
+}
+
+.project .fa-trash-can {
+  cursor: pointer;
+}
+
+#show-projects {
   cursor: pointer;
 }
 
@@ -277,6 +326,7 @@ select:hover {
 }
 
 button.btn-cancel,
+button.btn-cancel-project,
 button.btn-cancel-update {
   background: #f7fee7;
   border: 1px solid #eee;
@@ -322,7 +372,7 @@ Add project form
 
 .container-add-project {
   width: 100%;
-  height: 55%;
+  height: 65%;
   position: fixed;
   display: none;
 }
@@ -353,4 +403,12 @@ Add project form
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.content-hidden {
+  display: none;
+}
+
+.show-content {
+  display: block;
 }
