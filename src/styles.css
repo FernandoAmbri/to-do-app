@@ -236,8 +236,8 @@ button.add-task:hover {
   margin: 0 10px;
 }
 
-.task-description {
-  font-size: 1.2rem;
+.task-description-card {
+  font-size: 1.4rem;
 }
 
 .task i {
