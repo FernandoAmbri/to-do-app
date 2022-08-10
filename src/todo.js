@@ -1,18 +1,16 @@
-class Todo {
+export default class Todo {
   constructor(
     title = "",
     description = "",
     dueDate = "",
     projectName = "",
-    priority = 1,
-    taskFinished = false
+    priority = 1
   ) {
     this.title = title;
     this.description = description;
     this.dueDate = dueDate;
     this.projectName = projectName;
     this.priority = priority;
-    this.taskFinished = taskFinished;
   }
 
   getTitle() {
@@ -54,14 +52,4 @@ class Todo {
   setPriority(priority) {
     this.priority = priority;
   }
-
-  getTaskFinished() {
-    return this.taskFinished;
-  }
-
-  setTaskFinished(taskFinished) {
-    this.taskFinished = taskFinished;
-  }
 }
-
-export { Todo };

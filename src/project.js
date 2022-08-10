@@ -1,4 +1,4 @@
-class Project {
+export default class Project {
   constructor(name = "") {
     this.name = name;
     this.todos = [];
@@ -12,24 +12,36 @@ class Project {
     return this.todos;
   }
 
-  getTodo(index) {
-    return this.todos.find((item, i) => i === index);
+  getTodo(title) {
+    const todo = this.todos.find((item) => item.getTitle() === title);
+    return todo ? todo : false;
+  }
+
+  getIndexTodo(todo) {
+    return this.todos.findIndex((item) => item.getTitle() === todo.getTitle());
   }
 
   addTodo(todo) {
-    this.todos.push(todo);
+    if (!this.getTodo(todo.getTitle())) {
+      if (this.getName() === todo.getProjectName()) {
+        this.todos.push(todo);
+        return true;
+      }
+    }
+    return false;
   }
 
-  removeTodo(index) {
-    this.todos = this.todos.filter((item, i) => i !== index);
+  removeTodo(todoTitle) {
+    this.todos = this.todos.filter((item) => item.getTitle() !== todoTitle);
   }
 
-  updateTodo(index, obj) {
-    let arr = Object.keys(obj);
-    arr.forEach((item) => {
-      this.todos[index][item] = obj[item];
-    });
+  updateTodo(index, todo) {
+    if (todo.getProjectName() === this.name && this.getTodo(todo.getTitle())) {
+      this.todos[index] = todo;
+      return true;
+    } else {
+      this.removeTodo(todo.getTitle());
+      return false;
+    }
   }
 }
-
-export { Project };

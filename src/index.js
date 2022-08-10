@@ -1,28 +1,19 @@
-import { compareAsc, format } from "date-fns";
 import "./styles.css";
 import {
   createCardTodo,
   createCardProjects,
   createSelectOptions,
-} from "./components.js";
+} from "./components";
 
 import {
   getValuesFromForm,
   getValuesFormUpdate,
   getValuesFromNavbar,
   showInfoFormUpdate,
-} from "./formContent.js";
+} from "./formContent";
 
-import {
-  addTodo,
-  updateTodo,
-  deleteTodo,
-  getDataTodoCard,
-} from "./todoPerformance.js";
-
-import { Project } from "./project.js";
-import { Projects } from "./projects.js";
-import { Tasks } from "./tasks.js";
+import Project from "./project";
+import Projects from "./projects";
 
 const inboxSection = document.querySelector(".inbox");
 const todaySection = document.querySelector(".today");
@@ -57,15 +48,19 @@ const selectProjectNavbar = document.getElementById("select-project-navbar");
 
 let sectionTitle = document.querySelector(".task-container").firstElementChild;
 
-let inbox = new Tasks();
-let today = new Tasks();
-let projects = new Projects();
+const inbox = new Project("Inbox");
+const today = new Project("Today");
+const projects = new Projects();
+
+projects.addProject(inbox);
+projects.addProject(today);
 
 let indexCardTodo = 0;
 let arrayTodosDOM = [];
 let arrayProjectsDOM = [];
 
 createSelectOptions(projects.projects, selectProject);
+const getSectionObject = (projectName) => projects.getProject(projectName);
 
 function closeFormAddTask() {
   formAddTodo.reset();
@@ -86,7 +81,7 @@ function showFormUpdateTask() {
   formUpdateTodo.style.display = "block";
 }
 
-function currentDate() {
+function getCurrentDate() {
   const dateObject = new Date();
   let year = dateObject.getFullYear();
   let month = dateObject.getMonth() + 1;
@@ -106,8 +101,15 @@ function deleteTodoDOM() {
   document.querySelectorAll(".task").forEach((task, i) => {
     task.firstElementChild.addEventListener("change", (e) => {
       if (e.target.checked) {
-        deleteTodo(i);
+        const project = getSectionObject(sectionTitle.textContent);
+        if (project !== today) {
+          projects.deleteTodoToday(i, project);
+        } else {
+          projects.deleteTodoFromToday(i);
+        }
         containerTodoList.removeChild(task);
+        showTodoList();
+        showCurrentTodos();
       }
     });
   });
@@ -116,17 +118,22 @@ function deleteTodoDOM() {
 function showTodoList() {
   containerTodoList.textContent = "";
   const object = getSectionObject(sectionTitle.textContent);
-
-  if (object !== null) {
+  if (object) {
     object.todos.forEach((todo, i) => createCardTodo(i, todo));
     updateTodoCardDOM();
     deleteTodoDOM();
   }
 }
 
-function addTodoFromForm(valuesTodo) {
-  if (valuesTodo["title"].trim() !== "" && valuesTodo["dueDate"] !== "") {
-    addTodo(valuesTodo, valuesTodo["projectName"]);
+function addTodoFromForm(todoObj) {
+  if (todoObj.getTitle().trim() !== "") {
+    if (todoObj.getProjectName().trim() === "") {
+      const project = getSectionObject(sectionTitle.textContent);
+      if (project !== today) {
+        todoObj.setProjectName(project.getName());
+      }
+    }
+    projects.addTodoFromProject(todoObj);
   }
 }
 
@@ -140,27 +147,13 @@ function formOperations() {
 function updateTodoCard(indexCard, todoData) {
   const divContainer = document.querySelectorAll(".task")[indexCard];
   if (divContainer) {
-    divContainer.style.cssText = `border: 2px solid ${todoData["priority"]}`;
+    divContainer.style.cssText = `border: 2px solid ${todoData.priority}`;
 
     const titleTask = divContainer.children[1].firstElementChild;
     const descriptionTask = divContainer.children[1].lastElementChild;
 
-    titleTask.textContent = todoData["title"];
-    descriptionTask.textContent = todoData["description"];
-  }
-}
-
-function getSectionObject(objName) {
-  if (arguments.length === 0) {
-    objName = sectionTitle.textContent;
-  }
-
-  if (objName === "Inbox") {
-    return inbox;
-  } else if (objName === "Today") {
-    return today;
-  } else {
-    return projects.getProject(objName);
+    titleTask.textContent = todoData.title;
+    descriptionTask.textContent = todoData.description;
   }
 }
 
@@ -173,12 +166,27 @@ function showFormUpdateCard(arrayTask, indexCard) {
     containerTodoList.insertBefore(formUpdateTodo, arrayTask[indexCard + 1]);
   }
   formUpdateTodo.style.display = "block";
-  showInfoFormUpdate(getDataTodoCard(indexCard));
 
   btnCancelUpdateForm.addEventListener("click", () => {
     formUpdateTodo.style.display = "none";
     showTodoList();
   });
+}
+
+function updateTodoFromForm(valuesTodo) {
+  if (valuesTodo.getTitle().trim() !== "") {
+    const project = getSectionObject(sectionTitle.textContent);
+    if (project !== today) {
+      projects.updateTodoToday(indexCardTodo, valuesTodo, project);
+    } else {
+      projects.updateTodoFromToday(indexCardTodo, valuesTodo);
+    }
+  }
+}
+
+function getDataTodoCard(indexCard) {
+  const project = getSectionObject(sectionTitle.textContent);
+  return project.todos[indexCard];
 }
 
 function updateTodoCardDOM() {
@@ -187,9 +195,10 @@ function updateTodoCardDOM() {
     task.lastElementChild.addEventListener("click", (e) => {
       containerTodoList.removeChild(arrayTodosDOM[index]);
       indexCardTodo = index;
+      closeFormAddTask();
       createSelectOptions(projects.projects, selectUpdateProject);
       showFormUpdateCard(arrayTodosDOM, index);
-      closeFormAddTask();
+      showInfoFormUpdate(getDataTodoCard(index));
     });
   });
 }
@@ -218,6 +227,17 @@ function showSectionTodo(section) {
     item.classList.remove("section-active");
   });
   section.classList.add("section-active");
+}
+
+function showCurrentTodos() {
+  const spanNumberTodos = document.querySelectorAll("#number-of-tasks");
+  spanNumberTodos.forEach((item, i) => {
+    const todosQuantity = projects.getProjects()[i].todos.length;
+    item.textContent = "";
+    if (todosQuantity > 0) {
+      item.textContent = todosQuantity;
+    }
+  });
 }
 
 /*
@@ -264,6 +284,7 @@ function projectOperations() {
       chooseObjectList(project);
     });
   });
+
   document.querySelectorAll("#delete-project").forEach((project, index) => {
     project.addEventListener("click", (e) => {
       deleteProject(index);
@@ -299,25 +320,25 @@ formAddTodo.addEventListener("submit", (e) => {
   e.preventDefault();
   addTodoFromForm(getValuesFromForm());
   showTodoList();
+  showCurrentTodos();
   formAddTodo.reset();
+});
+
+formUpdateTodo.addEventListener("submit", (e) => {
+  e.preventDefault();
+  updateTodoFromForm(getValuesFormUpdate());
+  updateTodoCard(indexCardTodo, getValuesFormUpdate());
+  formUpdateTodo.style.display = "none";
+  showTodoList();
+  showCurrentTodos();
 });
 
 formAddTodoNavbar.addEventListener("submit", (e) => {
   e.preventDefault();
   addTodoFromForm(getValuesFromNavbar());
-  showTodoList();
   formAddTodoNavbar.reset();
-});
-
-formUpdateTodo.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const valuesTodo = getValuesFormUpdate();
-  if (valuesTodo["title"].trim() !== "" && valuesTodo["dueDate"] !== "") {
-    updateTodo(indexCardTodo, valuesTodo);
-    updateTodoCard(indexCardTodo, valuesTodo);
-  }
-  formUpdateTodo.style.display = "none";
   showTodoList();
+  showCurrentTodos();
 });
 
 formAddProject.addEventListener("submit", (e) => {
@@ -328,9 +349,9 @@ formAddProject.addEventListener("submit", (e) => {
   addProjectDOM(projectName);
   projectOperations();
 
-  createSelectOptions(projects.projects, selectProject);
-  createSelectOptions(projects.projects, selectUpdateProject);
-  createSelectOptions(projects.projects, selectProjectNavbar);
+  createSelectOptions(projects.getProjects(), selectProject);
+  createSelectOptions(projects.getProjects(), selectUpdateProject);
+  createSelectOptions(projects.getProjects(), selectProjectNavbar);
 
   formAddProject.reset();
   formAddProject.style.display = "none";
@@ -361,27 +382,7 @@ btnToggleSidebar.addEventListener("click", (e) => {
   const dueDateUpdate = document.getElementById("dueDate-update");
   const dueDateNavbar = document.getElementById("duedate-navbar");
 
-  dueDate.setAttribute("min", currentDate());
-  dueDateUpdate.setAttribute("min", currentDate());
-  dueDateNavbar.setAttribute("min", currentDate());
+  dueDate.setAttribute("min", getCurrentDate());
+  dueDateUpdate.setAttribute("min", getCurrentDate());
+  dueDateNavbar.setAttribute("min", getCurrentDate());
 })();
-
-//crear una función que guarde los proyectos y todos
-
-//Crear una función que guarde los proyectos o todos cada vez que un nuevo
-//todo es creado.
-function storeData() {}
-
-//Crear una función que elimine todos desde localstorage
-
-function removeStoredData() {}
-
-//También tenemos que crear otra función que busque todos cuando se cargue por
-//primera vez la app.
-
-/* 
-Make sure your app doesn’t crash if the data 
-you may want retrieve from localStorage isn’t there!
-*/
-
-export { inbox, today, projects, getSectionObject, currentDate };

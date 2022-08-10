@@ -1,21 +1,16 @@
+import Todo from "./todo";
+
 function getValuesFromForm() {
   const title = document.getElementById("task-name").value;
   const description = document.getElementById("task-description").value;
-  const dueDate = document.getElementById("dueDate").value;
+  const dueDate = document.getElementById("dueDate").value.replace(/-/g, "/");
   const chooseProject = document.getElementById("select-project");
   const taskPriority = document.getElementById("task-priority");
 
   const projectName = chooseProject.options[chooseProject.selectedIndex].value;
   const priority = taskPriority.options[taskPriority.selectedIndex].value;
 
-  return {
-    title,
-    description,
-    dueDate,
-    projectName,
-    priority,
-    taskFinished: false,
-  };
+  return new Todo(title, description, dueDate, projectName, priority);
 }
 
 function getFormUpdateInputs() {
@@ -36,54 +31,43 @@ function getFormUpdateInputs() {
 
 function showInfoFormUpdate(dataObject) {
   const inputsFormUpdate = getFormUpdateInputs();
-  const todo = dataObject;
-  inputsFormUpdate["inputTitle"].value = todo.title;
-  inputsFormUpdate["inputDescription"].value = todo.description;
-  inputsFormUpdate["inputDueDate"].value = todo.dueDate;
-  inputsFormUpdate["inputChooseProject"].value = todo.projectName;
-  inputsFormUpdate["inputPriority"].value = todo.priority;
+  inputsFormUpdate.inputTitle.value = dataObject.getTitle();
+  inputsFormUpdate.inputDescription.value = dataObject.getDescription();
+  inputsFormUpdate.inputDueDate.value = dataObject
+    .getDueDate()
+    .replace(/(\/)/g, "-");
+  inputsFormUpdate.inputChooseProject.value = dataObject.getProjectName();
+  inputsFormUpdate.inputPriority.value = dataObject.getPriority();
 }
 
 function getValuesFormUpdate() {
   const inputsFormUpdate = getFormUpdateInputs();
 
-  const title = inputsFormUpdate["inputTitle"].value;
-  const description = inputsFormUpdate["inputDescription"].value;
-  const dueDate = inputsFormUpdate["inputDueDate"].value;
-  const chooseProject = inputsFormUpdate["inputChooseProject"];
-  const taskPriority = inputsFormUpdate["inputPriority"];
+  const title = inputsFormUpdate.inputTitle.value;
+  const description = inputsFormUpdate.inputDescription.value;
+  const dueDate = inputsFormUpdate.inputDueDate.value.replace(/-/g, "/");
+  const chooseProject = inputsFormUpdate.inputChooseProject;
+  const taskPriority = inputsFormUpdate.inputPriority;
 
   const projectName = chooseProject.options[chooseProject.selectedIndex].value;
   const priority = taskPriority.options[taskPriority.selectedIndex].value;
 
-  return {
-    title,
-    description,
-    dueDate,
-    projectName,
-    priority,
-    taskFinished: false,
-  };
+  return new Todo(title, description, dueDate, projectName, priority);
 }
 
 function getValuesFromNavbar() {
   const title = document.getElementById("task-name-navbar").value;
   const description = document.getElementById("task-description-navbar").value;
-  const dueDate = document.getElementById("duedate-navbar").value;
+  const dueDate = document
+    .getElementById("duedate-navbar")
+    .value.replace(/-/g, "/");
   const chooseProject = document.getElementById("select-project-navbar");
   const taskPriority = document.getElementById("task-priority-navbar");
 
   const projectName = chooseProject.options[chooseProject.selectedIndex].value;
   const priority = taskPriority.options[taskPriority.selectedIndex].value;
 
-  return {
-    title,
-    description,
-    dueDate,
-    projectName,
-    priority,
-    taskFinished: false,
-  };
+  return new Todo(title, description, dueDate, projectName, priority);
 }
 
 export {
