@@ -26,16 +26,18 @@
       <nav class="navbar">
         <ul>
           <li>
-            <a href="#"><i class="fa-solid fa-bars"></i></a>
+            <a href="#"><i class="fa-solid fa-bars" id="toggle-sidebar"></i></a>
           </li>
           <li>
-            <a href="#"><i class="fa-solid fa-home"></i></a>
+            <a href="#"><i class="fa-solid fa-home" id="btn-home"></i></a>
           </li>
           <li><input type="search" placeholder="search" /></li>
         </ul>
         <ul>
           <li>
-            <a href="#"><i class="fa-solid fa-plus"></i></a>
+            <a href="#"
+              ><i class="fa-solid fa-plus" id="add-todo-navbar"></i
+            ></a>
           </li>
         </ul>
       </nav>
@@ -48,14 +50,14 @@
               <i class="fa-solid fa-inbox"></i>
               <p id="todo-title">Inbox</p>
             </div>
-            <span id="number-of-task-inbox"></span>
+            <span id="number-of-tasks"></span>
           </div>
           <div class="today section">
             <div>
               <i class="fa-solid fa-calendar-check"></i>
               <p id="todo-title">Today</p>
             </div>
-            <span id="number-of-task-today"></span>
+            <span id="number-of-tasks"></span>
           </div>
           <div class="projects">
             <div>
@@ -102,7 +104,7 @@
               ></textarea>
               <div class="selectors">
                 <div>
-                  <input type="date" id="dueDate" name="dueDate" required />
+                  <input type="date" id="dueDate" name="dueDate" autocomplete />
                   <select name="projects" id="select-project">
                     <option value="" hidden>Choose a project</option>
                   </select>
@@ -117,7 +119,7 @@
               </div>
             </div>
             <div class="buttons-card">
-              <button type="button" class="btn-cancel">Cancel</button>
+              <button type="button" class="btn-cancel cancel">Cancel</button>
               <button type="submit" class="btn-add">Add task</button>
             </div>
           </form>
@@ -125,11 +127,11 @@
       </div>
     </main>
     <div class="container-fixed">
-      <form action="#">
+      <form action="#" id="form-add-todo-navbar">
         <div class="task-card">
           <input
             type="text"
-            id="task-name"
+            id="task-name-navbar"
             placeholder="Task name"
             minlength="1"
             maxlength="150"
@@ -137,39 +139,41 @@
           />
           <textarea
             name="description"
-            id="task-description"
+            id="task-description-navbar"
             placeholder="Description"
             cols="30"
             rows="10"
           ></textarea>
           <div class="selectors">
             <div>
-              <input type="date" id="dueDate" name="dueDate" required />
-              <select name="projects" id="select-project">
+              <input type="date" id="duedate-navbar" name="dueDate" required />
+              <select name="projects" id="select-project-navbar">
                 <option value="" hidden>Choose a project</option>
               </select>
             </div>
-            <select name="priority" id="task-priority">
+            <select name="priority" id="task-priority-navbar">
               <option value="" hidden>Priority</option>
-              <option value="1">Priority 1</option>
-              <option value="2">Priority 2</option>
-              <option value="3">Priority 3</option>
-              <option value="4">Priority 4</option>
+              <option value="red">Red</option>
+              <option value="orange">Orange</option>
+              <option value="yellow">Yellow</option>
+              <option value="blue">Blue</option>
             </select>
           </div>
         </div>
         <div class="buttons-card">
-          <button class="btn-cancel">Cancel</button>
-          <button class="btn-add">Add task</button>
+          <button type="button" class="btn-cancel-navbar cancel">Cancel</button>
+          <button type="submit" class="btn-add">Add task</button>
         </div>
       </form>
     </div>
     <div class="container-add-project">
-      <form action="#" id="form_add_project">
+      <form action="#" id="form-add-project">
         <label for="project-name">Name</label>
         <input type="text" id="project-name" name="project-name" required />
         <div class="buttons-card">
-          <button class="btn-cancel-project">Cancel</button>
+          <button type="button" class="btn-cancel-project cancel">
+            Cancel
+          </button>
           <button type="submit" class="btn-add">Add</button>
         </div>
       </form>
@@ -208,7 +212,7 @@
         </div>
       </div>
       <div class="buttons-card">
-        <button type="button" class="btn-cancel-update">Cancel</button>
+        <button type="button" class="btn-cancel-update cancel">Cancel</button>
         <button type="submit" class="btn-save">Save</button>
       </div>
     </form>
