@@ -8,8 +8,16 @@ export default class Project {
     return this.name;
   }
 
+  setName(name) {
+    this.name = name;
+  }
+
   getTodos() {
     return this.todos;
+  }
+
+  setTodos(todosArray) {
+    this.todos = todosArray;
   }
 
   getTodo(title) {

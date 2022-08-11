@@ -37,7 +37,6 @@ const btnCancelUpdateForm = document.querySelector(".btn-cancel-update");
 const btnCancelFormNavbar = document.querySelector(".btn-cancel-navbar");
 const btnAddProject = document.getElementById("add-project");
 const btnAddTodoNavbar = document.getElementById("add-todo-navbar");
-const btnToggleSidebar = document.getElementById("toggle-sidebar");
 const btnHome = document.getElementById("btn-home");
 
 const inputProjectName = document.getElementById("project-name");
@@ -58,6 +57,8 @@ let indexCardTodo = 0;
 let arrayTodosDOM = [];
 
 createSelectOptions(projects.projects, selectProject);
+displayProjectsBar();
+
 const getSectionObject = (projectName) => projects.getProject(projectName);
 
 function closeFormAddTask() {
@@ -128,6 +129,12 @@ function showTodoList() {
     deleteTodoDOM();
   }
 }
+
+//si localstorage se encuentra vacío quiere decir que es la primera vez,
+//entonces se tiene que agregar por default Inbox y today.
+
+//después el usuario, no va a poder eliminar today ni inbox.
+console.log(localStorage.length);
 
 function addTodoFromForm(todoObj) {
   if (todoObj.getTitle().trim() !== "") {
@@ -267,12 +274,6 @@ function showFormAddProject() {
   });
 }
 
-function showInboxSection() {
-  sectionTitle.textContent = "Inbox";
-  showSectionTodo(inboxSection);
-  showTodoList();
-}
-
 function projectOperations() {
   const projectsDOM = document.querySelectorAll(".project");
   const deleteProjects = document.querySelectorAll("#delete-project");
@@ -288,7 +289,6 @@ function projectOperations() {
       const projectName =
         e.target.parentElement.children[0].children[1].textContent;
       deleteProject(projectName);
-      showInboxSection();
       showProjectsList();
       showCurrentTodos();
     });
@@ -319,48 +319,46 @@ function displayProjectsBar() {
   });
 }
 
-const initApp = () => {
-  formAddTodo.addEventListener("submit", (e) => {
-    e.preventDefault();
-    addTodoFromForm(getValuesFromForm());
-    showTodoList();
-    showCurrentTodos();
-    formAddTodo.reset();
-  });
+formAddTodo.addEventListener("submit", (e) => {
+  e.preventDefault();
+  addTodoFromForm(getValuesFromForm());
+  showTodoList();
+  showCurrentTodos();
+  formAddTodo.reset();
+});
 
-  formUpdateTodo.addEventListener("submit", (e) => {
-    e.preventDefault();
-    updateTodoFromForm(getValuesFormUpdate());
-    updateTodoCard(indexCardTodo, getValuesFormUpdate());
-    closeFormUpdateTask();
-    showTodoList();
-    showCurrentTodos();
-  });
+formUpdateTodo.addEventListener("submit", (e) => {
+  e.preventDefault();
+  updateTodoFromForm(getValuesFormUpdate());
+  updateTodoCard(indexCardTodo, getValuesFormUpdate());
+  closeFormUpdateTask();
+  showTodoList();
+  showCurrentTodos();
+});
 
-  formAddTodoNavbar.addEventListener("submit", (e) => {
-    e.preventDefault();
-    addTodoFromForm(getValuesFromNavbar());
-    showTodoList();
-    showCurrentTodos();
-    formAddTodoNavbar.reset();
-  });
+formAddTodoNavbar.addEventListener("submit", (e) => {
+  e.preventDefault();
+  addTodoFromForm(getValuesFromNavbar());
+  showTodoList();
+  showCurrentTodos();
+  formAddTodoNavbar.reset();
+});
 
-  formAddProject.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const projectName = inputProjectName.value.trim();
+formAddProject.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const projectName = inputProjectName.value.trim();
 
-    addProject(projectName);
-    showProjectsList();
-    projectOperations();
+  addProject(projectName);
+  showProjectsList();
+  projectOperations();
 
-    createSelectOptions(projects.getProjects(), selectProject);
-    createSelectOptions(projects.getProjects(), selectUpdateProject);
-    createSelectOptions(projects.getProjects(), selectProjectNavbar);
+  createSelectOptions(projects.getProjects(), selectProject);
+  createSelectOptions(projects.getProjects(), selectUpdateProject);
+  createSelectOptions(projects.getProjects(), selectProjectNavbar);
 
-    formAddProject.reset();
-    containerAddProject.classList.remove("show-form");
-  });
-};
+  formAddProject.reset();
+  containerAddProject.classList.remove("show-form");
+});
 
 inboxSection.addEventListener("click", (e) => chooseObjectList(e.target));
 todaySection.addEventListener("click", (e) => chooseObjectList(e.target));
@@ -375,10 +373,6 @@ btnHome.addEventListener("click", (e) => {
   sectionTitle.textContent = "Today";
   showSectionTodo(todaySection);
   showTodoList();
-});
-
-btnToggleSidebar.addEventListener("click", (e) => {
-  //document.querySelector(".sidebar").classList.toggle("content-hidden");
 });
 
 (function setCurrentDate() {

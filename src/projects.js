@@ -9,6 +9,10 @@ export default class Projects {
     return this.projects;
   }
 
+  setProjects(projectsArray) {
+    this.projects = projectsArray;
+  }
+
   getProject(name) {
     const project = this.projects.find((project) => project.name === name);
     return project ? project : false;
