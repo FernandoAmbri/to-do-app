@@ -29,7 +29,6 @@ const containerAddProject = document.querySelector(".container-add-project");
 const containerAddTodoNavbar = document.querySelector(".container-fixed");
 
 const sectionTodo = document.querySelectorAll(".section");
-const showProjectsBar = document.getElementById("show-projects");
 
 const btnAddTodo = document.querySelector(".add-task");
 const btnFormCancel = document.querySelector(".btn-cancel");
@@ -57,28 +56,33 @@ projects.addProject(today);
 
 let indexCardTodo = 0;
 let arrayTodosDOM = [];
-let arrayProjectsDOM = [];
 
 createSelectOptions(projects.projects, selectProject);
 const getSectionObject = (projectName) => projects.getProject(projectName);
 
 function closeFormAddTask() {
   formAddTodo.reset();
-  formAddTodo.style.display = "none";
+  formAddTodo.classList.remove("show-content");
 }
 
 function showFormAddTask() {
-  const formAddTodo = document.getElementById("form-task-card");
-  formAddTodo.style.display = "block";
+  formAddTodo.classList.add("show-content");
 }
 
 function closeFormUpdateTask() {
-  formUpdateTodo.style.display = "none";
+  formUpdateTodo.classList.remove("show-content");
 }
 
 function showFormUpdateTask() {
-  const formUpdateTodo = document.getElementById("form-update-task");
-  formUpdateTodo.style.display = "block";
+  formUpdateTodo.classList.add("show-content");
+}
+
+function cleanTodosContainer() {
+  containerTodoList.textContent = "";
+}
+
+function cleanContainerProjects() {
+  containerProjects.textContent = "";
 }
 
 function getCurrentDate() {
@@ -116,7 +120,7 @@ function deleteTodoDOM() {
 }
 
 function showTodoList() {
-  containerTodoList.textContent = "";
+  cleanTodosContainer();
   const object = getSectionObject(sectionTitle.textContent);
   if (object) {
     object.todos.forEach((todo, i) => createCardTodo(i, todo));
@@ -138,7 +142,6 @@ function addTodoFromForm(todoObj) {
 }
 
 function formOperations() {
-  createSelectOptions(projects.projects, selectProject);
   closeFormUpdateTask();
   showTodoList();
   showFormAddTask();
@@ -165,10 +168,10 @@ function showFormUpdateCard(arrayTask, indexCard) {
   } else {
     containerTodoList.insertBefore(formUpdateTodo, arrayTask[indexCard + 1]);
   }
-  formUpdateTodo.style.display = "block";
 
+  showFormUpdateTask();
   btnCancelUpdateForm.addEventListener("click", () => {
-    formUpdateTodo.style.display = "none";
+    closeFormUpdateTask();
     showTodoList();
   });
 }
@@ -196,7 +199,6 @@ function updateTodoCardDOM() {
       containerTodoList.removeChild(arrayTodosDOM[index]);
       indexCardTodo = index;
       closeFormAddTask();
-      createSelectOptions(projects.projects, selectUpdateProject);
       showFormUpdateCard(arrayTodosDOM, index);
       showInfoFormUpdate(getDataTodoCard(index));
     });
@@ -208,7 +210,7 @@ function chooseObjectList(object) {
   closeFormAddTask();
   closeFormUpdateTask();
   showSectionTodo(object);
-  containerTodoList.textContent = "";
+  cleanTodosContainer();
   showTodoList();
 }
 
@@ -223,7 +225,8 @@ function closeFormAddTodoNavbar() {
 
 function showSectionTodo(section) {
   const sectionArray = Array.from(sectionTodo);
-  sectionArray.concat(arrayProjectsDOM).forEach((item) => {
+  const projects = Array.from(containerProjects.children);
+  sectionArray.concat(projects).forEach((item) => {
     item.classList.remove("section-active");
   });
   section.classList.add("section-active");
@@ -251,112 +254,113 @@ function addProject(projectName) {
   }
 }
 
-function addProjectDOM(projectName) {
-  if (projectName !== "") {
-    const projectCard = createCardProjects(projectName);
-    containerProjects.appendChild(projectCard);
-    arrayProjectsDOM.push(projectCard);
-  }
-}
-
-function deleteProject(index) {
-  projects.removeProject(index);
-}
-
-function deleteProjectDOM(index) {
-  arrayProjectsDOM.splice(index, 1);
-}
+const deleteProject = (projectName) => {
+  projects.deleteAllTodos(projectName);
+  projects.removeProject(projectName);
+};
 
 function showFormAddProject() {
-  formAddProject.style.display = "flex";
   containerAddProject.classList.add("show-form");
-
   btnCancelProject.addEventListener("click", (e) => {
     formAddProject.reset();
-    formAddProject.style.display = "none";
     containerAddProject.classList.remove("show-form");
   });
 }
 
+function showInboxSection() {
+  sectionTitle.textContent = "Inbox";
+  showSectionTodo(inboxSection);
+  showTodoList();
+}
+
 function projectOperations() {
-  document.querySelectorAll(".project").forEach((project) => {
+  const projectsDOM = document.querySelectorAll(".project");
+  const deleteProjects = document.querySelectorAll("#delete-project");
+
+  projectsDOM.forEach((project) => {
     project.addEventListener("click", (e) => {
       chooseObjectList(project);
     });
   });
 
-  document.querySelectorAll("#delete-project").forEach((project, index) => {
+  deleteProjects.forEach((project) => {
     project.addEventListener("click", (e) => {
-      deleteProject(index);
-      deleteProjectDOM(index);
+      const projectName =
+        e.target.parentElement.children[0].children[1].textContent;
+      deleteProject(projectName);
+      showInboxSection();
       showProjectsList();
+      showCurrentTodos();
     });
   });
 }
 
 function showProjectsList() {
-  containerProjects.textContent = "";
-  if (arrayProjectsDOM.length > 0) {
-    arrayProjectsDOM.forEach((projectCard) =>
-      containerProjects.appendChild(projectCard)
-    );
-  }
+  cleanContainerProjects();
+  projects.getProjects().forEach((project) => {
+    if (project.getName() !== "Inbox" && project.getName() !== "Today") {
+      containerProjects.appendChild(createCardProjects(project.getName()));
+    }
+  });
+  projectOperations();
 }
 
-showProjectsBar.addEventListener("click", (e) => {
-  if (e.target.classList[1] === "fa-chevron-right") {
-    showProjectsBar.classList.remove("fa-chevron-right");
-    showProjectsBar.classList.add("fa-chevron-down");
-    containerProjects.classList.add("show-content");
+function displayProjectsBar() {
+  const showProjectsBar = document.getElementById("show-projects");
+
+  showProjectsBar.addEventListener("click", (e) => {
+    showProjectsBar.classList.toggle("fa-chevron-right");
+    showProjectsBar.classList.toggle("fa-chevron-down");
+    containerProjects.classList.toggle("show-content");
+
+    if (showProjectsBar.classList.contains("fa-chevron-down")) {
+      showProjectsList();
+    }
+  });
+}
+
+const initApp = () => {
+  formAddTodo.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addTodoFromForm(getValuesFromForm());
+    showTodoList();
+    showCurrentTodos();
+    formAddTodo.reset();
+  });
+
+  formUpdateTodo.addEventListener("submit", (e) => {
+    e.preventDefault();
+    updateTodoFromForm(getValuesFormUpdate());
+    updateTodoCard(indexCardTodo, getValuesFormUpdate());
+    closeFormUpdateTask();
+    showTodoList();
+    showCurrentTodos();
+  });
+
+  formAddTodoNavbar.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addTodoFromForm(getValuesFromNavbar());
+    showTodoList();
+    showCurrentTodos();
+    formAddTodoNavbar.reset();
+  });
+
+  formAddProject.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const projectName = inputProjectName.value.trim();
+
+    addProject(projectName);
     showProjectsList();
-  } else if (e.target.classList[1] === "fa-chevron-down") {
-    showProjectsBar.classList.remove("fa-chevron-down");
-    showProjectsBar.classList.add("fa-chevron-right");
-    containerProjects.classList.remove("show-content");
-  }
-});
+    projectOperations();
 
-formAddTodo.addEventListener("submit", (e) => {
-  e.preventDefault();
-  addTodoFromForm(getValuesFromForm());
-  showTodoList();
-  showCurrentTodos();
-  formAddTodo.reset();
-});
+    createSelectOptions(projects.getProjects(), selectProject);
+    createSelectOptions(projects.getProjects(), selectUpdateProject);
+    createSelectOptions(projects.getProjects(), selectProjectNavbar);
 
-formUpdateTodo.addEventListener("submit", (e) => {
-  e.preventDefault();
-  updateTodoFromForm(getValuesFormUpdate());
-  updateTodoCard(indexCardTodo, getValuesFormUpdate());
-  formUpdateTodo.style.display = "none";
-  showTodoList();
-  showCurrentTodos();
-});
-
-formAddTodoNavbar.addEventListener("submit", (e) => {
-  e.preventDefault();
-  addTodoFromForm(getValuesFromNavbar());
-  formAddTodoNavbar.reset();
-  showTodoList();
-  showCurrentTodos();
-});
-
-formAddProject.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const projectName = inputProjectName.value.trim();
-
-  addProject(projectName);
-  addProjectDOM(projectName);
-  projectOperations();
-
-  createSelectOptions(projects.getProjects(), selectProject);
-  createSelectOptions(projects.getProjects(), selectUpdateProject);
-  createSelectOptions(projects.getProjects(), selectProjectNavbar);
-
-  formAddProject.reset();
-  formAddProject.style.display = "none";
-  containerAddProject.classList.remove("show-form");
-});
+    formAddProject.reset();
+    containerAddProject.classList.remove("show-form");
+  });
+};
 
 inboxSection.addEventListener("click", (e) => chooseObjectList(e.target));
 todaySection.addEventListener("click", (e) => chooseObjectList(e.target));

@@ -1,4 +1,4 @@
-import { toDate, isToday } from "date-fns";
+import { isToday } from "date-fns";
 
 export default class Projects {
   constructor() {
@@ -20,8 +20,16 @@ export default class Projects {
     }
   }
 
-  removeProject(name) {
-    this.projects = this.projects.filter((item) => item.name !== name);
+  getProjectIndex(projectName) {
+    return this.projects.findIndex(
+      (project) => project.getName() === projectName
+    );
+  }
+
+  removeProject(projectName) {
+    this.projects = this.projects.filter(
+      (item) => item.getName() !== projectName
+    );
   }
 
   addTodoFromProject(todo) {
@@ -138,13 +146,25 @@ export default class Projects {
     today.removeTodo(todoObj.getTitle());
   }
 
-  deleteTodoToday(index, project) {
+  deleteAllTodos(projectName) {
+    const project = this.getProject(projectName);
+    project.getTodos().forEach((todo, i) => {
+      if (isToday(new Date(todo.getDueDate()))) {
+        const index = i;
+        this.deleteTodoToday(index, project, true);
+      }
+    });
+  }
+
+  deleteTodoToday(index, project, removeProject) {
     const today = this.getProject("Today");
-    const todoTitle = project.getTodos()[index].getTitle();
+    const todoTitle = project.todos[index].getTitle();
     const indexTodo = this.findTodoToday(project, todoTitle);
     if (indexTodo >= 0) {
       today.removeTodo(todoTitle);
     }
-    project.removeTodo(todoTitle);
+    if (removeProject === undefined) {
+      project.removeTodo(todoTitle);
+    }
   }
 }
