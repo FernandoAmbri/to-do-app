@@ -37,6 +37,11 @@ export default class Storage {
     return projects;
   }
 
+  getAllProjects() {
+    const projects = this.getProjectsStorage();
+    return projects.getProjects();
+  }
+
   addProjectStorage(project) {
     const projects = this.getProjectsStorage();
     projects.addProject(project);
@@ -65,6 +70,12 @@ export default class Storage {
   updateTodoFromTodayStorage(index, todoObj) {
     const projects = this.getProjectsStorage();
     projects.updateTodoFromToday(index, todoObj);
+    this.saveProjectsStorage(projects);
+  }
+
+  deleteAllTodosProject(projectName) {
+    const projects = this.getProjectsStorage();
+    projects.deleteAllTodos(projectName);
     this.saveProjectsStorage(projects);
   }
 

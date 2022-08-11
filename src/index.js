@@ -13,7 +13,7 @@ import {
 } from "./formContent";
 
 import Project from "./project";
-import Projects from "./projects";
+import Storage from "./localStorage";
 
 const inboxSection = document.querySelector(".inbox");
 const todaySection = document.querySelector(".today");
@@ -46,20 +46,19 @@ const selectProjectNavbar = document.getElementById("select-project-navbar");
 
 let sectionTitle = document.querySelector(".task-container").firstElementChild;
 
-const inbox = new Project("Inbox");
-const today = new Project("Today");
-const projects = new Projects();
-
-projects.addProject(inbox);
-projects.addProject(today);
+const storage = new Storage();
 
 let indexCardTodo = 0;
 let arrayTodosDOM = [];
 
-createSelectOptions(projects.projects, selectProject);
+storage.loadDataStorage();
+createSelectOptions(storage.getAllProjects(), selectProject);
 displayProjectsBar();
 
-const getSectionObject = (projectName) => projects.getProject(projectName);
+const getSectionObject = (projectName) =>
+  storage.getProjectStorage(projectName);
+
+showTodoList();
 
 function closeFormAddTask() {
   formAddTodo.reset();
@@ -107,10 +106,10 @@ function deleteTodoDOM() {
     task.firstElementChild.addEventListener("change", (e) => {
       if (e.target.checked) {
         const project = getSectionObject(sectionTitle.textContent);
-        if (project !== today) {
-          projects.deleteTodoToday(i, project);
+        if (project !== storage.getProjectStorage("Today")) {
+          storage.deleteTodoTodayStorage(i, project);
         } else {
-          projects.deleteTodoFromToday(i);
+          storage.deleteTodoFromTodayStorage(i);
         }
         containerTodoList.removeChild(task);
         showTodoList();
@@ -130,21 +129,15 @@ function showTodoList() {
   }
 }
 
-//si localstorage se encuentra vacío quiere decir que es la primera vez,
-//entonces se tiene que agregar por default Inbox y today.
-
-//después el usuario, no va a poder eliminar today ni inbox.
-console.log(localStorage.length);
-
 function addTodoFromForm(todoObj) {
   if (todoObj.getTitle().trim() !== "") {
     if (todoObj.getProjectName().trim() === "") {
       const project = getSectionObject(sectionTitle.textContent);
-      if (project !== today) {
+      if (project !== storage.getProjectStorage("Today")) {
         todoObj.setProjectName(project.getName());
       }
     }
-    projects.addTodoFromProject(todoObj);
+    storage.addTodoStorage(todoObj);
   }
 }
 
@@ -187,9 +180,9 @@ function updateTodoFromForm(valuesTodo) {
   if (valuesTodo.getTitle().trim() !== "") {
     const project = getSectionObject(sectionTitle.textContent);
     if (project !== today) {
-      projects.updateTodoToday(indexCardTodo, valuesTodo, project);
+      storage.updateTodoTodayStorage(indexCardTodo, valuesTodo, project);
     } else {
-      projects.updateTodoFromToday(indexCardTodo, valuesTodo);
+      storage.updateTodoFromTodayStorage(indexCardTodo, valuesTodo);
     }
   }
 }
@@ -222,7 +215,7 @@ function chooseObjectList(object) {
 }
 
 function showFormAddTodoNavbar() {
-  createSelectOptions(projects.projects, selectProjectNavbar);
+  createSelectOptions(storage.getAllProjects(), selectProjectNavbar);
   containerAddTodoNavbar.classList.add("show-form");
 }
 
@@ -242,7 +235,7 @@ function showSectionTodo(section) {
 function showCurrentTodos() {
   const spanNumberTodos = document.querySelectorAll("#number-of-tasks");
   spanNumberTodos.forEach((item, i) => {
-    const todosQuantity = projects.getProjects()[i].todos.length;
+    const todosQuantity = storage.getAllProjects()[i].todos.length;
     item.textContent = "";
     if (todosQuantity > 0) {
       item.textContent = todosQuantity;
@@ -257,13 +250,13 @@ PROJECTS
 function addProject(projectName) {
   if (projectName !== "") {
     const newProject = new Project(projectName);
-    projects.addProject(newProject);
+    storage.addProjectStorage(newProject);
   }
 }
 
 const deleteProject = (projectName) => {
-  projects.deleteAllTodos(projectName);
-  projects.removeProject(projectName);
+  storage.deleteAllTodosProject(projectName);
+  storage.removeProjectStorage(projectName);
 };
 
 function showFormAddProject() {
@@ -297,7 +290,7 @@ function projectOperations() {
 
 function showProjectsList() {
   cleanContainerProjects();
-  projects.getProjects().forEach((project) => {
+  storage.getAllProjects().forEach((project) => {
     if (project.getName() !== "Inbox" && project.getName() !== "Today") {
       containerProjects.appendChild(createCardProjects(project.getName()));
     }
@@ -352,9 +345,9 @@ formAddProject.addEventListener("submit", (e) => {
   showProjectsList();
   projectOperations();
 
-  createSelectOptions(projects.getProjects(), selectProject);
-  createSelectOptions(projects.getProjects(), selectUpdateProject);
-  createSelectOptions(projects.getProjects(), selectProjectNavbar);
+  createSelectOptions(storage.getAllProjects(), selectProject);
+  createSelectOptions(storage.getAllProjects(), selectUpdateProject);
+  createSelectOptions(storage.getAllProjects(), selectProjectNavbar);
 
   formAddProject.reset();
   containerAddProject.classList.remove("show-form");
