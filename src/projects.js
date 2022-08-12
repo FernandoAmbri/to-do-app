@@ -1,5 +1,4 @@
 import { isToday } from "date-fns";
-import Project from "./project";
 
 export default class Projects {
   constructor() {
@@ -15,8 +14,8 @@ export default class Projects {
   }
 
   getProject(name) {
-    const project = this.projects.find((project) => project.name === name);
-    return project ? project : false;
+    const project = this.projects.find((item) => item.name === name);
+    return project || false;
   }
 
   addProject(project) {

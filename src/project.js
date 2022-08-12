@@ -22,7 +22,7 @@ export default class Project {
 
   getTodo(title) {
     const todo = this.todos.find((item) => item.getTitle() === title);
-    return todo ? todo : false;
+    return todo || false;
   }
 
   getIndexTodo(todo) {
@@ -47,9 +47,8 @@ export default class Project {
     if (todo.getProjectName() === this.name && this.getTodo(todo.getTitle())) {
       this.todos[index] = todo;
       return true;
-    } else {
-      this.removeTodo(todo.getTitle());
-      return false;
     }
+    this.removeTodo(todo.getTitle());
+    return false;
   }
 }
