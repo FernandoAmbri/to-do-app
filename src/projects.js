@@ -1,4 +1,5 @@
 import { isToday } from "date-fns";
+import Project from "./project";
 
 export default class Projects {
   constructor() {
@@ -60,20 +61,23 @@ export default class Projects {
     let indexTodo = -1;
 
     today.todos.forEach((item, i) => {
-      if (
-        item.searchTodo.projectSearch === project.getName() &&
-        item.searchTodo.todoTitle === todoTitle
-      ) {
-        indexTodo = i;
+      if (item.hasOwnProperty("searchTodo")) {
+        if (
+          item.searchTodo.projectSearch === project.getName() &&
+          item.searchTodo.todoTitle === todoTitle
+        ) {
+          indexTodo = i;
+        }
       }
     });
-    return indexTodo >= 0 ? indexTodo : -1;
+    return indexTodo;
   }
 
-  updateTodoToday(index, todoObj, project) {
-    let updatedTodo = null;
+  updateTodoToday(index, todoObj, projectName) {
     const today = this.getProject("Today");
+    const project = this.getProject(projectName);
     const todoTitle = project.getTodos()[index].getTitle();
+    let updatedTodo = null;
 
     if (isToday(new Date(todoObj.getDueDate()))) {
       const todoIndex = this.findTodoToday(project, todoTitle);
@@ -145,29 +149,34 @@ export default class Projects {
     if (todoObj.hasOwnProperty("searchTodo")) {
       const { projectSearch, todoTitle } = todoObj.searchTodo;
       const project = this.getProject(projectSearch);
-      project.removeTodo(todoTitle);
+      if (project) {
+        project.removeTodo(todoTitle);
+      }
     }
     today.removeTodo(todoObj.getTitle());
   }
 
   deleteAllTodos(projectName) {
     const project = this.getProject(projectName);
-    project.getTodos().forEach((todo, i) => {
-      if (isToday(new Date(todo.getDueDate()))) {
-        const index = i;
-        this.deleteTodoToday(index, project, true);
-      }
-    });
+    if (project) {
+      project.getTodos().forEach((todo, i) => {
+        if (isToday(new Date(todo.getDueDate()))) {
+          const index = i;
+          this.deleteTodoToday(index, projectName, true);
+        }
+      });
+    }
   }
 
-  deleteTodoToday(index, project, removeProject) {
+  deleteTodoToday(index, projectName) {
+    const project = this.getProject(projectName);
     const today = this.getProject("Today");
-    const todoTitle = project.todos[index].getTitle();
+    const todoTitle = project.getTodos()[index].getTitle();
     const indexTodo = this.findTodoToday(project, todoTitle);
     if (indexTodo >= 0) {
       today.removeTodo(todoTitle);
     }
-    if (removeProject === undefined) {
+    if (arguments.length < 3) {
       project.removeTodo(todoTitle);
     }
   }

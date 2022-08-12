@@ -61,9 +61,9 @@ export default class Storage {
     this.saveProjectsStorage(projects);
   }
 
-  updateTodoTodayStorage(index, todoObj, project) {
+  updateTodoTodayStorage(index, todoObj, projectName) {
     const projects = this.getProjectsStorage();
-    projects.updateTodoToday(index, todoObj, project);
+    projects.updateTodoToday(index, todoObj, projectName);
     this.saveProjectsStorage(projects);
   }
 
@@ -73,15 +73,9 @@ export default class Storage {
     this.saveProjectsStorage(projects);
   }
 
-  deleteAllTodosProject(projectName) {
+  deleteTodoTodayStorage(index, projectName) {
     const projects = this.getProjectsStorage();
-    projects.deleteAllTodos(projectName);
-    this.saveProjectsStorage(projects);
-  }
-
-  deleteTodoTodayStorage(index, project) {
-    const projects = this.getProjectsStorage();
-    projects.deleteTodoToday(index, project);
+    projects.deleteTodoToday(index, projectName);
     this.saveProjectsStorage(projects);
   }
 
