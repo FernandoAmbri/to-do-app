@@ -43,7 +43,8 @@ const selectProject = document.getElementById("select-project");
 const selectUpdateProject = document.getElementById("select-project-update");
 const selectProjectNavbar = document.getElementById("select-project-navbar");
 
-let sectionTitle = document.querySelector(".task-container").firstElementChild;
+const sectionTitle =
+  document.querySelector(".task-container").firstElementChild;
 
 const storage = new Storage();
 
@@ -386,15 +387,15 @@ btnHome.addEventListener("click", (e) => {
 
 function getCurrentDate() {
   const dateObject = new Date();
-  let year = dateObject.getFullYear();
+  const year = dateObject.getFullYear();
   let month = dateObject.getMonth() + 1;
   let date = dateObject.getDate();
 
   if (month < 10) {
-    month = "0" + month;
+    month = `0${month}`;
   }
   if (date < 10) {
-    date = "0" + date;
+    date = `0${date}`;
   }
 
   return `${year}-${month}-${date}`;
