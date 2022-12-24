@@ -31,7 +31,18 @@
           <li>
             <a href="#"><i class="fa-solid fa-home" id="btn-home"></i></a>
           </li>
-          <li><input type="search" placeholder="search" /></li>
+          <li>
+            <div class="search-container">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input
+                type="text"
+                placeholder="search task"
+                id="search-todo"
+                class="search-todo"
+              />
+              <i class="fa-solid fa-times"></i>
+            </div>
+          </li>
         </ul>
         <ul>
           <li>
@@ -111,10 +122,10 @@
                 </div>
                 <select name="priority" id="task-priority">
                   <option value="" hidden>Priority</option>
-                  <option value="red">Red</option>
-                  <option value="orange">Orange</option>
-                  <option value="yellow">Yellow</option>
-                  <option value="blue">Blue</option>
+                  <option value="red">Very important</option>
+                  <option value="orange">Important</option>
+                  <option value="yellow">Normal</option>
+                  <option value="blue">Easy one</option>
                 </select>
               </div>
             </div>
@@ -127,7 +138,7 @@
       </div>
     </main>
     <div class="container-fixed">
-      <form action="#" id="form-add-todo-navbar">
+      <form id="form-add-todo-navbar">
         <div class="task-card">
           <input
             type="text"
@@ -153,10 +164,10 @@
             </div>
             <select name="priority" id="task-priority-navbar">
               <option value="" hidden>Priority</option>
-              <option value="red">Red</option>
-              <option value="orange">Orange</option>
-              <option value="yellow">Yellow</option>
-              <option value="blue">Blue</option>
+              <option value="red">Very important</option>
+              <option value="orange">Important</option>
+              <option value="yellow">Normal</option>
+              <option value="blue">Easy one</option>
             </select>
           </div>
         </div>
@@ -167,7 +178,7 @@
       </form>
     </div>
     <div class="container-add-project">
-      <form action="#" id="form-add-project">
+      <form id="form-add-project">
         <label for="project-name">Name</label>
         <input type="text" id="project-name" name="project-name" required />
         <div class="buttons-card">
@@ -178,7 +189,7 @@
         </div>
       </form>
     </div>
-    <form action="#" class="form-update-task" id="form-update-task">
+    <form class="form-update-task" id="form-update-task">
       <div class="task-card">
         <input
           type="text"
@@ -204,10 +215,10 @@
           </div>
           <select name="priority" id="task-priority-update">
             <option value="" hidden>Priority</option>
-            <option value="red">Red</option>
-            <option value="orange">Orange</option>
-            <option value="yellow">Yellow</option>
-            <option value="blue">Blue</option>
+            <option value="red">Very important</option>
+            <option value="orange">Important</option>
+            <option value="yellow">Normal</option>
+            <option value="blue">Easy one</option>
           </select>
         </div>
       </div>
@@ -216,5 +227,11 @@
         <button type="submit" class="btn-save">Save</button>
       </div>
     </form>
+    <section
+      class="search-todos-container not-visible"
+      id="search-todos-container"
+    >
+      <div class="recently-searched">Recently searched:</div>
+    </section>
   </body>
 </html>
