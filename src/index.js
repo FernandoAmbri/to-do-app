@@ -70,7 +70,7 @@ initApp();
  */
 
 function searchTodo(e) {
-  const searchValue = e.target.value;
+  const searchValue = e.target.value.toLowerCase().trim();
   const projects = storage.getAllProjects();
   const todaySection = "Today";
 
@@ -79,7 +79,7 @@ function searchTodo(e) {
   let todosToday = [];
   let searchResult;
 
-  if (!searchValue.trim()) {
+  if (!searchValue) {
     createShowTodos([]);
     return;
   }
@@ -88,22 +88,24 @@ function searchTodo(e) {
     if (project.name === todaySection) {
       todosToday = [...project.todos];
     } else {
-      todosArray = [...project.todos];
+      todosArray = [...todosArray, ...project.todos];
     }
   });
 
   const foundTodos = todosArray.filter((todo) =>
-    todo.title.includes(searchValue.trim())
+    todo.title.toLowerCase().includes(searchValue)
   );
 
   const foundTodosToday = todosToday.filter((todo) =>
-    todo.title.includes(searchValue.trim())
+    todo.title.toLowerCase().includes(searchValue)
   );
 
   if (foundTodos.length) {
+    console.log("foundTodos");
     searchResult = createShowTodos(foundTodos);
     searchResultArray = new Array(...searchResult.children);
   } else if (foundTodosToday.length) {
+    console.log("foundTodosToday");
     searchResult = createShowTodos(foundTodosToday);
     searchResultArray = new Array(...searchResult.children);
   } else {
