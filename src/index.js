@@ -3,6 +3,7 @@ import {
   createCardTodo,
   createCardProjects,
   createSelectOptions,
+  createShowTodos,
 } from "./components";
 
 import {
@@ -43,6 +44,9 @@ const selectProject = document.getElementById("select-project");
 const selectUpdateProject = document.getElementById("select-project-update");
 const selectProjectNavbar = document.getElementById("select-project-navbar");
 
+const inputSearch = document.getElementById("search-todo");
+const searchResult = document.getElementById("search-todos-container");
+
 const sectionTitle =
   document.querySelector(".task-container").firstElementChild;
 
@@ -53,6 +57,65 @@ let arrayTodosDOM = [];
 
 initApp();
 
+/**
+ * SEARCH OPERATIONS
+ */
+
+function searchTodo(e) {
+  const searchValue = e.target.value;
+  const projects = storage.getAllProjects();
+  const todaySection = "Today";
+
+  let todosArray = [];
+  let todosToday = [];
+  let searchResult;
+  let searchResultArray = [];
+
+  if (!searchValue.trim()) {
+    createShowTodos([]);
+    return;
+  }
+
+  projects.forEach((project) => {
+    if (project.name === todaySection) {
+      todosToday = [...project.todos];
+    } else {
+      todosArray = [...project.todos];
+    }
+  });
+
+  const foundTodos = todosArray.filter((todo) =>
+    todo.title.includes(searchValue.trim())
+  );
+
+  const foundTodosToday = todosToday.filter((todo) =>
+    todo.title.includes(searchValue.trim())
+  );
+
+  if (foundTodos.length) {
+    searchResult = createShowTodos(foundTodos);
+    searchResultArray = new Array(...searchResult.children);
+  } else if (foundTodosToday.length) {
+    searchResult = createShowTodos(foundTodosToday);
+    searchResultArray = new Array(...searchResult.children);
+  } else {
+    searchResult = createShowTodos([]);
+    searchResultArray = [];
+  }
+
+  showSearchedSection(searchResultArray);
+}
+
+function showSearchedSection(arrayResult) {
+  arrayResult = arrayResult.slice(1);
+  for (const elem of arrayResult) {
+    const currentSection = elem.childNodes[1].childNodes[1].textContent;
+    elem.addEventListener("click", () => {
+      sectionTitle.textContent = currentSection;
+      showTodoList();
+    });
+  }
+}
 /**
  * TODO OPERATIONS
  */
@@ -366,8 +429,12 @@ formUpdateTodo.addEventListener("submit", (e) => performUpdateTodo(e));
 formAddProject.addEventListener("submit", (e) => performAddProject(e));
 formAddTodo.addEventListener("submit", (e) => performAddTodo(e));
 
-inboxSection.addEventListener("click", (e) => selectProjectSection(e.target));
-todaySection.addEventListener("click", (e) => selectProjectSection(e.target));
+inboxSection.addEventListener("click", (e) =>
+  selectProjectSection(inboxSection)
+);
+todaySection.addEventListener("click", (e) =>
+  selectProjectSection(todaySection)
+);
 
 btnAddTodo.addEventListener("click", startFormOperations);
 btnFormCancel.addEventListener("click", closeFormAddTask);
@@ -379,6 +446,20 @@ btnHome.addEventListener("click", (e) => {
   sectionTitle.textContent = "Today";
   showSectionProject(todaySection);
   showTodoList();
+});
+
+inputSearch.addEventListener("input", (e) => searchTodo(e));
+inputSearch.addEventListener("focus", (e) => {
+  searchResult.classList.remove("not-visible");
+});
+inputSearch.addEventListener("focusout", (e) => {
+  inputSearch.value = "";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target !== inputSearch) {
+    searchResult.classList.add("not-visible");
+  }
 });
 
 /**
@@ -411,8 +492,12 @@ function setCurrentDate() {
   dueDateNavbar.setAttribute("min", getCurrentDate());
 }
 
+/**
+ * START APP
+ */
+
 function initApp() {
-  storage.loadDataStorage();
+  storage.loadDataStorage(); // get data from localStorage API
   createSelectOptions(storage.getAllProjects(), selectProject);
   displayProjectsBar();
   showTodoList();
