@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable class-methods-use-this */
 import Projects from "./projects";
 import Project from "./project";
 import Todo from "./todo";

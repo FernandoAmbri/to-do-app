@@ -1,3 +1,11 @@
+/* eslint-disable no-shadow */
+/* eslint-disable function-paren-newline */
+/* eslint-disable comma-dangle */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable operator-linebreak */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-restricted-syntax */
 import "./styles.css";
 import {
   createCardTodo,
@@ -66,10 +74,10 @@ function searchTodo(e) {
   const projects = storage.getAllProjects();
   const todaySection = "Today";
 
+  let searchResultArray = [];
   let todosArray = [];
   let todosToday = [];
   let searchResult;
-  let searchResultArray = [];
 
   if (!searchValue.trim()) {
     createShowTodos([]);
@@ -103,12 +111,13 @@ function searchTodo(e) {
     searchResultArray = [];
   }
 
+  // eslint-disable-next-line no-use-before-define
   showSearchedSection(searchResultArray);
 }
 
 function showSearchedSection(arrayResult) {
-  arrayResult = arrayResult.slice(1);
-  for (const elem of arrayResult) {
+  const arraySections = arrayResult.slice(1);
+  for (const elem of arraySections) {
     const currentSection = elem.childNodes[1].childNodes[1].textContent;
     elem.addEventListener("click", () => {
       sectionTitle.textContent = currentSection;
@@ -121,8 +130,8 @@ function showSearchedSection(arrayResult) {
  */
 
 function addTodoFromForm(todoObj) {
-  if (todoObj.getTitle().trim() !== "") {
-    if (todoObj.getProjectName().trim() === "") {
+  if (todoObj.getTitle().trim()) {
+    if (!todoObj.getProjectName().trim()) {
       const project = getSectionObject(sectionTitle.textContent);
       const today = storage.getProjectStorage("Today");
 
@@ -135,7 +144,7 @@ function addTodoFromForm(todoObj) {
 }
 
 function updateTodoFromForm(valuesTodo) {
-  if (valuesTodo.getTitle().trim() !== "") {
+  if (valuesTodo.getTitle().trim()) {
     const project = getSectionObject(sectionTitle.textContent);
     const today = storage.getProjectStorage("Today");
     if (project.getName() !== today.getName()) {
@@ -158,7 +167,7 @@ function getDataTodoCard(indexCard) {
 function updateTodoCardDOM() {
   arrayTodosDOM = Array.from(document.querySelectorAll(".task"));
   document.querySelectorAll(".task").forEach((task, index) => {
-    task.lastElementChild.addEventListener("click", (e) => {
+    task.lastElementChild.addEventListener("click", () => {
       showTodoList();
       containerTodoList.removeChild(arrayTodosDOM[index]);
       indexCardTodo = index;
@@ -286,7 +295,7 @@ function projectOperations() {
   const projectsDOM = document.querySelectorAll(".project");
   const deleteProjects = document.querySelectorAll("#delete-project");
   projectsDOM.forEach((project) => {
-    project.addEventListener("click", (e) => selectProjectSection(project));
+    project.addEventListener("click", () => selectProjectSection(project));
   });
   deleteProjects.forEach((icon) => {
     icon.addEventListener("click", (e) => performDeleteProject(e));
@@ -306,7 +315,7 @@ function showProjectsList() {
 function displayProjectsBar() {
   const showProjectsBar = document.getElementById("show-projects");
 
-  showProjectsBar.addEventListener("click", (e) => {
+  showProjectsBar.addEventListener("click", () => {
     showProjectsBar.classList.toggle("fa-chevron-right");
     showProjectsBar.classList.toggle("fa-chevron-down");
     containerProjects.classList.toggle("show-content");
@@ -329,7 +338,7 @@ function showSectionProject(section) {
 
 function showFormAddProject() {
   containerAddProject.classList.add("show-form");
-  btnCancelProject.addEventListener("click", (e) => {
+  btnCancelProject.addEventListener("click", () => {
     formAddProject.reset();
     containerAddProject.classList.remove("show-form");
   });
@@ -429,10 +438,10 @@ formUpdateTodo.addEventListener("submit", (e) => performUpdateTodo(e));
 formAddProject.addEventListener("submit", (e) => performAddProject(e));
 formAddTodo.addEventListener("submit", (e) => performAddTodo(e));
 
-inboxSection.addEventListener("click", (e) =>
+inboxSection.addEventListener("click", () =>
   selectProjectSection(inboxSection)
 );
-todaySection.addEventListener("click", (e) =>
+todaySection.addEventListener("click", () =>
   selectProjectSection(todaySection)
 );
 
@@ -442,17 +451,17 @@ btnAddTodoNavbar.addEventListener("click", showFormAddTodoNavbar);
 btnCancelFormNavbar.addEventListener("click", closeFormAddTodoNavbar);
 btnAddProject.addEventListener("click", showFormAddProject);
 
-btnHome.addEventListener("click", (e) => {
+btnHome.addEventListener("click", () => {
   sectionTitle.textContent = "Today";
   showSectionProject(todaySection);
   showTodoList();
 });
 
 inputSearch.addEventListener("input", (e) => searchTodo(e));
-inputSearch.addEventListener("focus", (e) => {
+inputSearch.addEventListener("focus", () => {
   searchResult.classList.remove("not-visible");
 });
-inputSearch.addEventListener("focusout", (e) => {
+inputSearch.addEventListener("focusout", () => {
   inputSearch.value = "";
 });
 

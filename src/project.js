@@ -40,7 +40,7 @@ export default class Project {
   }
 
   removeTodo(todoTitle) {
-    let index = this.todos.findIndex((item) => item.getTitle() === todoTitle);
+    const index = this.todos.findIndex((item) => item.getTitle() === todoTitle);
     this.todos = [
       ...this.todos.slice(0, index),
       ...this.todos.slice(index + 1),

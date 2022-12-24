@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-prototype-builtins */
 import { isToday } from "date-fns";
 
 export default class Projects {
@@ -79,7 +81,7 @@ export default class Projects {
     const today = this.getProject(todayTitle);
     const project = this.getProject(projectName);
     const todoTitle = project.getTodos()[index].getTitle();
-    let lowestIndex = 0;
+    const lowestIndex = 0;
     let updatedTodo = null;
 
     if (isToday(new Date(todoObj.getDueDate()))) {

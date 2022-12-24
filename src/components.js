@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-restricted-syntax */
 function createCardTodo(index, objTodo) {
   const divTask = document.createElement("div");
   const divTaskInfo = document.createElement("div");
@@ -21,7 +23,6 @@ function createCardTodo(index, objTodo) {
 }
 
 function createCardProjects(projectName) {
-  const containerProjects = document.querySelector(".container-projects");
   const divProject = document.createElement("div");
   const divInfo = document.createElement("div");
   const iconDelete = document.createElement("i");
@@ -36,7 +37,6 @@ function createCardProjects(projectName) {
   iconDelete.setAttribute("id", "delete-project");
 
   divProject.classList.add("project", "section");
-  //divProject.setAttribute("index-todo", index);
 
   divProject.appendChild(divInfo);
   divProject.appendChild(spanNumberTodos);
@@ -55,7 +55,7 @@ function createSelectOptions(arrayProjects, select) {
 
   select.appendChild(optionHidden);
 
-  if (arrayProjects.length > 0) {
+  if (arrayProjects.length) {
     arrayProjects.forEach((project) => {
       if (project.getName() !== "Today") {
         const option = document.createElement("option");
