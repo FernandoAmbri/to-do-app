@@ -37,8 +37,9 @@ export default class Projects {
   }
 
   addTodoFromProject(todo) {
+    const todayTitle = "Today";
     const project = this.getProject(todo.getProjectName());
-    const today = this.getProject("Today");
+    const today = this.getProject(todayTitle);
     const projectAdded = project ? project.addTodo(todo) : false;
 
     if (projectAdded) {
@@ -56,7 +57,8 @@ export default class Projects {
   }
 
   findTodoToday(project, todoTitle) {
-    const today = this.getProject("Today");
+    const todayTitle = "Today";
+    const today = this.getProject(todayTitle);
     let indexTodo = -1;
 
     today.todos.forEach((item, i) => {
@@ -73,9 +75,11 @@ export default class Projects {
   }
 
   updateTodoToday(index, todoObj, projectName) {
-    const today = this.getProject("Today");
+    const todayTitle = "Today";
+    const today = this.getProject(todayTitle);
     const project = this.getProject(projectName);
     const todoTitle = project.getTodos()[index].getTitle();
+    let lowestIndex = 0;
     let updatedTodo = null;
 
     if (isToday(new Date(todoObj.getDueDate()))) {
@@ -84,7 +88,7 @@ export default class Projects {
         projectSearch: project.getName(),
         todoTitle: todoObj.getTitle(),
       };
-      if (todoIndex >= 0) {
+      if (todoIndex >= lowestIndex) {
         today.todos[todoIndex] = todoObj;
       } else {
         today.todos.push(todoObj);
@@ -97,7 +101,7 @@ export default class Projects {
     } else {
       updatedTodo = project.updateTodo(index, todoObj);
       const todoIndex = this.findTodoToday(project, todoTitle);
-      if (todoIndex >= 0) {
+      if (todoIndex >= lowestIndex) {
         today.removeTodo(todoTitle);
       }
       if (updatedTodo === false) {
@@ -107,18 +111,21 @@ export default class Projects {
   }
 
   updateTodoFromToday(index, todoObj) {
-    const today = this.getProject("Today");
+    const todayTitle = "Today";
+    const todoProperty = "searchTodo";
+    const today = this.getProject(todayTitle);
     const todoValues = today.getTodos()[index];
 
-    if (todoValues.hasOwnProperty("searchTodo")) {
+    if (todoValues.hasOwnProperty(todoProperty)) {
       todoObj.searchTodo = todoValues.searchTodo;
     }
 
-    if (todoObj.hasOwnProperty("searchTodo")) {
+    if (todoObj.hasOwnProperty(todoProperty)) {
       const { projectSearch, todoTitle } = todoObj.searchTodo;
       const project = this.getProject(projectSearch);
       const indexSearch = project.getIndexTodo(project.getTodo(todoTitle));
       const updatedTodo = project.updateTodo(indexSearch, todoObj);
+
       if (updatedTodo === false) {
         today.removeTodo(todoTitle);
         this.addTodoFromProject(todoObj);
@@ -143,9 +150,12 @@ export default class Projects {
   }
 
   deleteTodoFromToday(index) {
-    const today = this.getProject("Today");
+    const todayTitle = "Today";
+    const todoProperty = "searchTodo";
+    const today = this.getProject(todayTitle);
     const todoObj = today.getTodos()[index];
-    if (todoObj.hasOwnProperty("searchTodo")) {
+
+    if (todoObj.hasOwnProperty(todoProperty)) {
       const { projectSearch, todoTitle } = todoObj.searchTodo;
       const project = this.getProject(projectSearch);
       if (project) {
@@ -168,10 +178,12 @@ export default class Projects {
   }
 
   deleteTodoToday(index, projectName) {
+    const todayTitle = "Today";
     const project = this.getProject(projectName);
-    const today = this.getProject("Today");
+    const today = this.getProject(todayTitle);
     const todoTitle = project.getTodos()[index].getTitle();
     const indexTodo = this.findTodoToday(project, todoTitle);
+
     if (indexTodo >= 0) {
       today.removeTodo(todoTitle);
     }

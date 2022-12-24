@@ -32,7 +32,7 @@ export default class Project {
   addTodo(todo) {
     if (!this.getTodo(todo.getTitle())) {
       if (this.getName() === todo.getProjectName()) {
-        this.todos.push(todo);
+        this.todos = [...this.todos, todo];
         return true;
       }
     }
@@ -40,7 +40,11 @@ export default class Project {
   }
 
   removeTodo(todoTitle) {
-    this.todos = this.todos.filter((item) => item.getTitle() !== todoTitle);
+    let index = this.todos.findIndex((item) => item.getTitle() === todoTitle);
+    this.todos = [
+      ...this.todos.slice(0, index),
+      ...this.todos.slice(index + 1),
+    ];
   }
 
   updateTodo(index, todo) {

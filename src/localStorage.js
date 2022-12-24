@@ -4,7 +4,7 @@ import Todo from "./todo";
 
 export default class Storage {
   loadDataStorage() {
-    if (localStorage.length === 0) {
+    if (!localStorage.length) {
       const projects = new Projects();
       projects.addProject(new Project("Inbox"));
       projects.addProject(new Project("Today"));

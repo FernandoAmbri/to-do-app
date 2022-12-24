@@ -58,13 +58,29 @@ ul a i:hover {
   border-radius: 4px;
 }
 
-input[type=search] {
+.search-container {
+  height: 30px;
+  min-width: 220px;
+  padding: 5px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  border-radius: 4px;
+}
+
+input[type=text] {
   opacity: 0.4;
-  padding: 7px 10px;
+  padding: 7px 10px 7px 0;
   outline: none;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  cursor: text;
+}
+
+.search-todo:focus {
+  width: 400px;
 }
 
 main {
@@ -74,7 +90,7 @@ main {
 
 .sidebar {
   background: #f7fee7;
-  width: 304px;
+  width: 335px;
   flex-shrink: 0;
 }
 
@@ -411,4 +427,59 @@ Add project form
 
 .show-content {
   display: block;
+}
+
+.search-todos-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  position: absolute;
+  top: 50px;
+  left: 115px;
+  width: 435px;
+  min-height: 50px;
+  max-height: 200px;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  overflow-y: auto;
+}
+
+.search-todos-container .todo-searched {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  cursor: pointer;
+  min-width: 400px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.recently-searched {
+  padding: 5px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.not-visible {
+  display: none;
+}
+
+.todo-searched:hover {
+  background-color: #eee;
+}
+
+.todo-searched-project {
+  display: flex;
+  min-width: 50px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-searched-project>p {
+  margin-left: 5px;
 }

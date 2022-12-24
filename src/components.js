@@ -12,7 +12,7 @@ function createCardTodo(index, objTodo) {
 
   divTask.classList.add("task");
   divTask.setAttribute("index-todo", index);
-  divTask.style.cssText = `border: 2px solid ${objTodo.getPriority()}`;
+  divTask.style.cssText = `border-left: 2px solid ${objTodo.getPriority()}`;
 
   divTask.appendChild(divTaskInfo);
   divTask.appendChild(iconUpdateTask);
@@ -67,4 +67,50 @@ function createSelectOptions(arrayProjects, select) {
   }
 }
 
-export { createCardTodo, createCardProjects, createSelectOptions };
+function createShowTodos(todosArray) {
+  const searchedTodos = document.getElementById("search-todos-container");
+  const inboxTitle = "Inbox";
+  const todayTitle = "Today";
+  searchedTodos.innerHTML = `<div class="recently-searched">Recently searched:</div>`;
+  if (todosArray.length) {
+    for (const todo of todosArray) {
+      const divTodo = document.createElement("div");
+      const projectTodo = document.createElement("div");
+      const infoTodo = document.createElement("p");
+      const projectName = document.createElement("p");
+      const iconProject = document.createElement("i");
+
+      projectName.textContent = todo.projectName;
+
+      if (todo.projectName === inboxTitle) {
+        iconProject.classList.add("fa-solid", "fa-inbox");
+      } else if (todo.projectName === "") {
+        projectName.textContent = todayTitle;
+        iconProject.classList.add("fa-solid", "fa-calendar-check");
+      } else {
+        iconProject.classList.add("fa-regular", "fa-file");
+      }
+
+      projectTodo.classList.add("todo-searched-project");
+      projectTodo.appendChild(iconProject);
+      projectTodo.appendChild(projectName);
+
+      infoTodo.textContent = todo.title;
+
+      divTodo.classList.add("todo-searched");
+      divTodo.setAttribute("id", "todo-searched");
+      divTodo.appendChild(infoTodo);
+      divTodo.appendChild(projectTodo);
+
+      searchedTodos.appendChild(divTodo);
+    }
+  }
+  return searchedTodos;
+}
+
+export {
+  createCardTodo,
+  createCardProjects,
+  createSelectOptions,
+  createShowTodos,
+};
