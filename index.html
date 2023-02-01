@@ -36,7 +36,7 @@
               <i class="fa-solid fa-magnifying-glass"></i>
               <input
                 type="text"
-                placeholder="search task"
+                placeholder="Buscar tarea..."
                 id="search-todo"
                 class="search-todo"
               />
@@ -66,14 +66,14 @@
           <div class="today section">
             <div>
               <i class="fa-solid fa-calendar-check"></i>
-              <p id="todo-title">Today</p>
+              <p id="todo-title">Actuales</p>
             </div>
             <span id="number-of-tasks"></span>
           </div>
           <div class="projects">
             <div>
               <i class="fa-solid fa-chevron-right" id="show-projects"></i>
-              <h2>Projects</h2>
+              <h2>Proyectos</h2>
             </div>
             <i class="fa-solid fa-plus" id="add-project"></i>
           </div>
@@ -83,25 +83,16 @@
       <div class="content">
         <div class="task-container">
           <h1>Inbox</h1>
-          <div class="task-list">
-            <!-- <div class="task">
-              <input type="checkbox" id="task-finished" />
-              <div>
-                <h2 class="task-name" id="task-name">Fernando</h2>
-                <p class="task-description" id="task-name">Do something</p>
-              </div>
-              <i class="fa-regular fa-pen-to-square"></i>
-            </div> -->
-          </div>
+          <div class="task-list"></div>
           <button class="add-task">
-            <i class="fa-solid fa-plus"></i> Add task
+            <i class="fa-solid fa-plus"></i> Agregar tarea
           </button>
           <form action="#" class="form-task-card" id="form-task-card">
             <div class="task-card">
               <input
                 type="text"
                 id="task-name"
-                placeholder="Task name"
+                placeholder="Nombre"
                 minlength="1"
                 maxlength="150"
                 required
@@ -109,7 +100,7 @@
               <textarea
                 name="description"
                 id="task-description"
-                placeholder="Description"
+                placeholder="Descripción"
                 cols="30"
                 rows="10"
               ></textarea>
@@ -117,21 +108,21 @@
                 <div>
                   <input type="date" id="dueDate" name="dueDate" autocomplete />
                   <select name="projects" id="select-project">
-                    <option value="" hidden>Choose a project</option>
+                    <option value="" hidden>Proyectos</option>
                   </select>
                 </div>
                 <select name="priority" id="task-priority">
-                  <option value="" hidden>Priority</option>
-                  <option value="red">Very important</option>
-                  <option value="orange">Important</option>
+                  <option value="" hidden>Prioridad</option>
+                  <option value="red">Muy importante</option>
+                  <option value="orange">Importante</option>
                   <option value="yellow">Normal</option>
-                  <option value="blue">Easy one</option>
+                  <option value="blue">Posponer</option>
                 </select>
               </div>
             </div>
             <div class="buttons-card">
-              <button type="button" class="btn-cancel cancel">Cancel</button>
-              <button type="submit" class="btn-add">Add task</button>
+              <button type="button" class="btn-cancel cancel">Cancelar</button>
+              <button type="submit" class="btn-add">Agregar</button>
             </div>
           </form>
         </div>
@@ -143,7 +134,7 @@
           <input
             type="text"
             id="task-name-navbar"
-            placeholder="Task name"
+            placeholder="Nombre"
             minlength="1"
             maxlength="150"
             required
@@ -159,33 +150,35 @@
             <div>
               <input type="date" id="duedate-navbar" name="dueDate" required />
               <select name="projects" id="select-project-navbar">
-                <option value="" hidden>Choose a project</option>
+                <option value="" hidden>Proyectos</option>
               </select>
             </div>
             <select name="priority" id="task-priority-navbar">
-              <option value="" hidden>Priority</option>
-              <option value="red">Very important</option>
-              <option value="orange">Important</option>
+              <option value="" hidden>Prioridad</option>
+              <option value="red">Muy importante</option>
+              <option value="orange">Importante</option>
               <option value="yellow">Normal</option>
-              <option value="blue">Easy one</option>
+              <option value="blue">Posponer</option>
             </select>
           </div>
         </div>
         <div class="buttons-card">
-          <button type="button" class="btn-cancel-navbar cancel">Cancel</button>
-          <button type="submit" class="btn-add">Add task</button>
+          <button type="button" class="btn-cancel-navbar cancel">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-add">Agregar</button>
         </div>
       </form>
     </div>
     <div class="container-add-project">
       <form id="form-add-project">
-        <label for="project-name">Name</label>
+        <label for="project-name">Nombre</label>
         <input type="text" id="project-name" name="project-name" required />
         <div class="buttons-card">
           <button type="button" class="btn-cancel-project cancel">
-            Cancel
+            Cancelar
           </button>
-          <button type="submit" class="btn-add">Add</button>
+          <button type="submit" class="btn-add">Agregar</button>
         </div>
       </form>
     </div>
@@ -194,7 +187,7 @@
         <input
           type="text"
           id="task-name-update"
-          placeholder="Task name"
+          placeholder="Nombre"
           minlength="1"
           maxlength="150"
           required
@@ -202,7 +195,7 @@
         <textarea
           name="description"
           id="task-description-update"
-          placeholder="Description"
+          placeholder="Descripción"
           cols="30"
           rows="10"
         ></textarea>
@@ -210,28 +203,28 @@
           <div>
             <input type="date" id="dueDate-update" name="dueDate" required />
             <select name="projects" id="select-project-update">
-              <option value="" hidden>Choose a project</option>
+              <option value="" hidden>Proyectos</option>
             </select>
           </div>
           <select name="priority" id="task-priority-update">
-            <option value="" hidden>Priority</option>
-            <option value="red">Very important</option>
-            <option value="orange">Important</option>
+            <option value="" hidden>Prioridad</option>
+            <option value="red">Muy importante</option>
+            <option value="orange">Importante</option>
             <option value="yellow">Normal</option>
-            <option value="blue">Easy one</option>
+            <option value="blue">Posponer</option>
           </select>
         </div>
       </div>
       <div class="buttons-card">
-        <button type="button" class="btn-cancel-update cancel">Cancel</button>
-        <button type="submit" class="btn-save">Save</button>
+        <button type="button" class="btn-cancel-update cancel">Cancelar</button>
+        <button type="submit" class="btn-save">Guardar</button>
       </div>
     </form>
     <section
       class="search-todos-container not-visible"
       id="search-todos-container"
     >
-      <div class="recently-searched">Recently searched:</div>
+      <div class="recently-searched">tareas buscadas:</div>
     </section>
   </body>
 </html>
