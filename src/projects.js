@@ -1,3 +1,5 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable comma-dangle */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-prototype-builtins */
 import { isToday } from "date-fns";
@@ -39,7 +41,7 @@ export default class Projects {
   }
 
   addTodoFromProject(todo) {
-    const todayTitle = "Today";
+    const todayTitle = "Actuales";
     const project = this.getProject(todo.getProjectName());
     const today = this.getProject(todayTitle);
     const projectAdded = project ? project.addTodo(todo) : false;
@@ -59,7 +61,7 @@ export default class Projects {
   }
 
   findTodoToday(project, todoTitle) {
-    const todayTitle = "Today";
+    const todayTitle = "Actuales";
     const today = this.getProject(todayTitle);
     let indexTodo = -1;
 
@@ -77,7 +79,7 @@ export default class Projects {
   }
 
   updateTodoToday(index, todoObj, projectName) {
-    const todayTitle = "Today";
+    const todayTitle = "Actuales";
     const today = this.getProject(todayTitle);
     const project = this.getProject(projectName);
     const todoTitle = project.getTodos()[index].getTitle();
@@ -113,7 +115,7 @@ export default class Projects {
   }
 
   updateTodoFromToday(index, todoObj) {
-    const todayTitle = "Today";
+    const todayTitle = "Actuales";
     const todoProperty = "searchTodo";
     const today = this.getProject(todayTitle);
     const todoValues = today.getTodos()[index];
@@ -152,7 +154,7 @@ export default class Projects {
   }
 
   deleteTodoFromToday(index) {
-    const todayTitle = "Today";
+    const todayTitle = "Actuales";
     const todoProperty = "searchTodo";
     const today = this.getProject(todayTitle);
     const todoObj = today.getTodos()[index];
@@ -180,17 +182,14 @@ export default class Projects {
   }
 
   deleteTodoToday(index, projectName) {
-    const todayTitle = "Today";
+    const todayTitle = "Actuales";
     const project = this.getProject(projectName);
     const today = this.getProject(todayTitle);
     const todoTitle = project.getTodos()[index].getTitle();
     const indexTodo = this.findTodoToday(project, todoTitle);
 
-    if (indexTodo >= 0) {
-      today.removeTodo(todoTitle);
-    }
-    if (arguments.length < 3) {
-      project.removeTodo(todoTitle);
-    }
+    if (indexTodo >= 0) today.removeTodo(todoTitle);
+
+    if (arguments.length < 3) project.removeTodo(todoTitle);
   }
 }

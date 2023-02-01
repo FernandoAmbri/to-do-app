@@ -51,13 +51,13 @@ function createSelectOptions(arrayProjects, select) {
   const optionHidden = document.createElement("option");
   optionHidden.value = "";
   optionHidden.setAttribute("hidden", "hidden");
-  optionHidden.textContent = "Choose a project";
+  optionHidden.textContent = "Proyectos";
 
   select.appendChild(optionHidden);
 
   if (arrayProjects.length) {
     arrayProjects.forEach((project) => {
-      if (project.getName() !== "Today") {
+      if (project.getName() !== "Actuales") {
         const option = document.createElement("option");
         option.value = project.name;
         option.textContent = project.name;
@@ -70,8 +70,8 @@ function createSelectOptions(arrayProjects, select) {
 function createShowTodos(todosArray) {
   const searchedTodos = document.getElementById("search-todos-container");
   const inboxTitle = "Inbox";
-  const todayTitle = "Today";
-  searchedTodos.innerHTML = `<div class="recently-searched">Recently searched:</div>`;
+  const todayTitle = "Actuales";
+  searchedTodos.innerHTML = `<div class="recently-searched">tareas buscadas:</div>`;
   if (todosArray.length) {
     for (const todo of todosArray) {
       const divTodo = document.createElement("div");

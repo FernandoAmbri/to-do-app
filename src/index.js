@@ -66,13 +66,13 @@ let arrayTodosDOM = [];
 initApp();
 
 /**
- * SEARCH OPERATIONS
+ * Función para buscar
  */
 
 function searchTodo(e) {
   const searchValue = e.target.value.toLowerCase().trim();
   const projects = storage.getAllProjects();
-  const todaySection = "Today";
+  const todaySection = "Actuales";
 
   let searchResultArray = [];
   let todosArray = [];
@@ -101,11 +101,9 @@ function searchTodo(e) {
   );
 
   if (foundTodos.length) {
-    console.log("foundTodos");
     searchResult = createShowTodos(foundTodos);
     searchResultArray = new Array(...searchResult.children);
   } else if (foundTodosToday.length) {
-    console.log("foundTodosToday");
     searchResult = createShowTodos(foundTodosToday);
     searchResultArray = new Array(...searchResult.children);
   } else {
@@ -135,8 +133,7 @@ function addTodoFromForm(todoObj) {
   if (todoObj.getTitle().trim()) {
     if (!todoObj.getProjectName().trim()) {
       const project = getSectionObject(sectionTitle.textContent);
-      const today = storage.getProjectStorage("Today");
-
+      const today = storage.getProjectStorage("Actuales");
       if (project.getName() !== today.getName()) {
         todoObj.setProjectName(project.getName());
       }
@@ -148,16 +145,16 @@ function addTodoFromForm(todoObj) {
 function updateTodoFromForm(valuesTodo) {
   if (valuesTodo.getTitle().trim()) {
     const project = getSectionObject(sectionTitle.textContent);
-    const today = storage.getProjectStorage("Today");
+    const today = storage.getProjectStorage("Actuales");
     if (project.getName() !== today.getName()) {
       storage.updateTodoTodayStorage(
         indexCardTodo,
         valuesTodo,
         project.getName()
       );
-    } else {
-      storage.updateTodoFromTodayStorage(indexCardTodo, valuesTodo);
+      return;
     }
+    storage.updateTodoFromTodayStorage(indexCardTodo, valuesTodo);
   }
 }
 
@@ -186,7 +183,7 @@ function deleteTodoDOM() {
     task.firstElementChild.addEventListener("change", (e) => {
       if (e.target.checked) {
         const project = getSectionObject(sectionTitle.textContent);
-        const today = storage.getProjectStorage("Today");
+        const today = storage.getProjectStorage("Actuales");
         if (project.getName() !== today.getName()) {
           storage.deleteTodoTodayStorage(i, project.getName());
         } else {
@@ -275,7 +272,7 @@ function startFormOperations() {
  */
 
 function addProject(projectName) {
-  if (projectName !== "") {
+  if (projectName) {
     const newProject = new Project(projectName);
     storage.addProjectStorage(newProject);
   }
@@ -307,8 +304,9 @@ function projectOperations() {
 function showProjectsList() {
   cleanContainerProjects();
   storage.getAllProjects().forEach((project) => {
-    if (project.getName() !== "Inbox" && project.getName() !== "Today") {
-      containerProjects.appendChild(createCardProjects(project.getName()));
+    const projectName = project.getName();
+    if (projectName !== "Inbox" && projectName !== "Actuales") {
+      containerProjects.appendChild(createCardProjects(projectName));
     }
   });
   projectOperations();

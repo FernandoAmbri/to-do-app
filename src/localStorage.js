@@ -9,7 +9,7 @@ export default class Storage {
     if (!localStorage.length) {
       const projects = new Projects();
       projects.addProject(new Project("Inbox"));
-      projects.addProject(new Project("Today"));
+      projects.addProject(new Project("Actuales"));
       this.saveProjectsStorage(projects);
     }
   }
